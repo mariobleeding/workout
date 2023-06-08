@@ -51,11 +51,20 @@ function App() {
     }
   }, [cycleCount]);
 
+  useEffect(() => {
+    if (start && !showFinalPage) {
+      const interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer + 1000);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [start, showFinalPage]);
+
   if (!start) {
     return (
-      <div className="flex items-center justify-center bg-[#b32b2b] text-[#F0F0F0] h-screen font-arvo">
+      <div className="flex items-center justify-center bg-[#1e1e1e] text-[#dc143c] h-screen font-moirai">
         <button
-          className="text-4xl bg-red-800 p-2 rounded-lg"
+          className="text-8xl bg-[#1e1e1e] p-2 rounded-lg"
           onClick={() => {
             setStart(true);
             sessionStorage.setItem("startTime", new Date().getTime());
@@ -67,24 +76,36 @@ function App() {
     );
   } else if (showFinalPage) {
     return (
-      <div className="flex flex-col items-center justify-center bg-[#b32b2b] text-[#F0F0F0] h-screen font-arvo">
-        <h1 className="text-4xl">Workout Complete!</h1>
-        <span>
-          time: {Math.round(timer / 1000 / 60)}m{" "}
-          {Math.round((timer / 1000) % 60)}s
+      <div className="flex flex-col items-center justify-center text-[#1e1e1e] bg-[#dc143c] h-screen font-moirai">
+        <h1 className="text-[15vh] uppercase font-bold">FINISH</h1>
+        <span className="text-[45vh] uppercase text-center bg-none">
+          {Math.round(timer / 1000 / 60)}m {Math.round((timer / 1000) % 60)}s
         </span>
       </div>
     );
   } else {
+    const lineWidth = `${(counterSet + 1) * 33}%`;
+    const lineStyle = {
+      width: lineWidth,
+      transition: "width 0.3s ease-in-out",
+    };
+
     return (
       <>
-        <div className="flex items-center justify-center bg-[#b32b2b] text-[#F0F0F0] h-screen font-arvo">
+        <div className="flex items-center justify-center text-[#dc143c] min-h-screen font-inter bg-[#1e1e1e]">
+          <span className="absolute font-moirai text-[55vh] text-center h-screen top-0 bg-none">
+            {Math.round(timer / 1000 / 60)}m {Math.round((timer / 1000) % 60)}s
+          </span>
           <button
-            className="text-4xl bg-red-800 p-2 rounded-lg"
+            className="absolute bottom-0 text-6xl bg-[#1e1e1e] text-[#dc143c] p-4 rounded-xl uppercase font-moirai shadow-lg hover:shadow-xl font-bold"
             onClick={handleExerciseClick}
           >
             {exercises[currentExercise].name} x{exercises[currentExercise].reps}
           </button>
+          <div
+            className="absolute bottom-0 left-0 bg-[#dc143c] h-1"
+            style={lineStyle}
+          ></div>
         </div>
       </>
     );

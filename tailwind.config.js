@@ -4,7 +4,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        arvo: ["Arvo", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
+        moirai: ["Moirai One", "sans-serif"],
       },
     },
   },
